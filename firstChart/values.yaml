@@ -5,10 +5,10 @@
 replicaCount: 1
 
 image:
-  repository: docker.io/rocker/rstudio
+  repository: rocker/rstudio
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "4.0.3"
 
 imagePullSecrets: []
 nameOverride: ""
