@@ -35,8 +35,13 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8787
               protocol: TCP
+          env:
+            - name: PASSWORD
+              value: "mypass"
+            - name: ROOT
+              value: "TRUE"
           livenessProbe:
             httpGet:
               path: /
