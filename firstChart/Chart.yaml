@@ -1,8 +1,8 @@
 apiVersion: v2
-name: firstChart
+name: firstRStudioChart
 version: 0.1.0
 kubeVersion: >= 1.20.0
-description: This is my first excursion into creating helm charts.
+description: This is my first excursion into creating my own helm charts.
 type: appliation
 keywords:
   - thesis
