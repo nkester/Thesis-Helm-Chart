@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "firstChart.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "firstChart.fullname" . }}:{{ .Values.rstudio.service.rstudioPort }}']
   restartPolicy: Never

@@ -14,14 +14,15 @@ deploymentStrategy: {}
 
 # Information for the first image, rstudio
 rstudio:
+  podName: rstudio-server
   imageRepository: rocker/rstudio
   imageTag: 4.0.3
   imagePullPolicy: IfNotPresent
   env:
-    - name: PASSWORD
-      value: "mypass"
-    - name: ROOT
-      value: "TRUE"
+    firstEnvName: PASSWORD
+    firstEnvValue: "mypass"
+    SecondEnvName: ROOT
+    SecondEnvValue: "TRUE"
   resources: {}
     # cpu: 250m
     # memory: 4800Mi
@@ -29,6 +30,7 @@ rstudio:
     type: NodePort
     rstudioPort: 8787
     podPort: 8787 #or 30633
+    portProtocol: TCP
     # clusterIP: None
   route: {}
     # enabled: false

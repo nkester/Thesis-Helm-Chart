@@ -28,30 +28,30 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ .Values.rstudio.podName }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.rstudio.imageRepository }}:{{ .Values.rstudio.imageTag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.rstudio.imagePullPolicy }}
           ports:
-            - name: http
-              containerPort: 8787
-              protocol: TCP
+            - name: rstudio-port
+              containerPort: {{ .Values.rstudio.service.rstudioPort }}
+              protocol: {{ .Values.rstudio.service.portProtocol }}
           env:
-            - name: PASSWORD
-              value: "mypass"
-            - name: ROOT
-              value: "TRUE"
+            - name: {{ .Values.rstudio.env.firstEnvName }}
+              value: {{ .Values.rstudio.env.firstEnvValue }}
+            - name: {{ .Values.rstudio.env.secondEnvName }}
+              value: {{ .Values.rstudio.env.secondEnvValue }}
           livenessProbe:
             httpGet:
               path: /
-              port: http
+              port: rstudio-port
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: rstudio-port
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.rstudio.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
