@@ -20,38 +20,17 @@ spec:
       labels:
         {{- include "firstChart.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "firstChart.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Values.rstudio.podName }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.rstudio.imageRepository }}:{{ .Values.rstudio.imageTag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.rstudio.imagePullPolicy }}
           ports:
-            - name: rstudio-port
-              containerPort: {{ .Values.rstudio.service.rstudioPort }}
-              protocol: {{ .Values.rstudio.service.portProtocol }}
+            - containerPort: {{ .Values.rstudio.service.rstudioPort }}
           env:
-            - name: {{ .Values.rstudio.env.firstEnvName }}
-              value: {{ .Values.rstudio.env.firstEnvValue }}
-            - name: {{ .Values.rstudio.env.secondEnvName }}
-              value: {{ .Values.rstudio.env.secondEnvValue }}
-          livenessProbe:
-            httpGet:
-              path: /
-              port: rstudio-port
-          readinessProbe:
-            httpGet:
-              path: /
-              port: rstudio-port
-          resources:
-            {{- toYaml .Values.rstudio.resources | nindent 12 }}
+            - name: PASSWORD
+              value: "mypass"
+            - name: ROOT
+              value: "TRUE"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

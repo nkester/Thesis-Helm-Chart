@@ -10,7 +10,7 @@ spec:
     - name: http
       protocol: TCP
       port: {{ .Values.rstudio.service.rstudioPort }}
-      nodePort: {{ .Values.rstudio.service.rstudioPort }}
+      nodePort: {{ .Values.rstudio.service.PodPort }}
       
   selector:
     {{- include "firstChart.selectorLabels" . | nindent 4 }}
