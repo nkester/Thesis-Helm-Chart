@@ -20,12 +20,24 @@ spec:
       labels:
         {{- include "firstChart.selectorLabels" . | nindent 8 }}
     spec:
+      volumes:
+        - name: user-neil-rstudio-volume
+          persistentVolumeClaim:
+            claimName: user-neil-rstudio-pvc
+        - name: project-a-rstudio-volume
+          persistentVolumeClaim:
+            claimName: project-a-rstudio-pvc
       containers:
         - name: {{ .Values.rstudio.podName }}
           image: "{{ .Values.rstudio.imageRepository }}:{{ .Values.rstudio.imageTag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.rstudio.imagePullPolicy }}
           ports:
             - containerPort: {{ .Values.rstudio.service.rstudioPort }}
+          volumeMounts:
+            - mountPath: "/home/rstudio/working-files"
+              name: user-neil-rstudio-volume
+            - mountPath: "/home/rstudio/project-a-files"
+              name: project-a-rstudio-volume
           env:
             - name: {{ .Values.rstudio.env.firstEnvName }}  #PASSWORD
               value: {{ .Values.rstudio.env.firstEnvValue }} #"mypass"
