@@ -27,10 +27,10 @@ spec:
           ports:
             - containerPort: {{ .Values.rstudio.service.rstudioPort }}
           env:
-            - name: PASSWORD
-              value: "mypass"
-            - name: ROOT
-              value: "TRUE"
+            - name: {{ .Values.rstudio.env.firstEnvName }}  #PASSWORD
+              value: {{ .Values.rstudio.env.firstEnvValue }} #"mypass"
+            - name: {{ .Values.rstudio.env.secondEnvName }} #ROOT
+              value: {{ quote .Values.rstudio.env.secondEnvValue }} #"TRUE"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
