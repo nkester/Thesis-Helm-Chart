@@ -5,12 +5,12 @@ metadata:
   labels:
     {{- include "firstChart.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.rstudio.service.type }}
   ports:
     - name: http
       protocol: TCP
-      port: {{ .Values.service.port }}
-      nodePort: {{ .Values.service.nodeport }}
+      port: {{ .Values.rstudio.service.rstudioPort }}
+      nodePort: {{ .Values.rstudio.service.PodPort }}
       
   selector:
     {{- include "firstChart.selectorLabels" . | nindent 4 }}

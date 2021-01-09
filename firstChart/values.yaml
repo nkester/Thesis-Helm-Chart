@@ -1,18 +1,47 @@
-# Default values for firstChart.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+# This is a place holder for now. 
+statefulset:
+  enabled: false
 
+# Replica Count
 replicaCount: 1
 
-image:
-  repository: rocker/rstudio
-  pullPolicy: Always
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "4.0.3"
+# Specify the deployment strategy. The provided are defaults
+deploymentStrategy: {}
+  # rollingUpdate:
+  #   maxSurge: 25%
+  #   maxUnavailable: 25%
+  # type: RollingUpdate
 
+# Information for the first image, rstudio
+rstudio:
+  podName: rstudio-server
+  imageRepository: rocker/rstudio
+  imageTag: 4.0.3
+  imagePullPolicy: IfNotPresent
+  env:
+    firstEnvName: PASSWORD
+    firstEnvValue: "mypass2"
+    secondEnvName: ROOT
+    secondEnvValue: "TRUE"
+  resources: {}
+    # cpu: 250m
+    # memory: 4800Mi
+  service:
+    type: NodePort
+    rstudioPort: 8787
+    podPort: 30633 #or 8787
+    portProtocol: TCP
+    # clusterIP: None
+  route: {}
+    # enabled: false
+    # name: docker
+    # portName: docker
+    # labels:
+    # annotations:
+ 
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+nameOverride: "rstudio"
+fullnameOverride: "rstudio"
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -36,10 +65,6 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-service:
-  type: NodePort
-  port: 8787
-  nodeport: 30633
 
 ingress:
   enabled: false
@@ -54,17 +79,6 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
 
 autoscaling:
   enabled: false

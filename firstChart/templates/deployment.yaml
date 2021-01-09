@@ -20,38 +20,29 @@ spec:
       labels:
         {{- include "firstChart.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      serviceAccountName: {{ include "firstChart.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      volumes:
+        - name: user-neil-rstudio-volume
+          persistentVolumeClaim:
+            claimName: user-neil-rstudio-pvc
+        - name: project-a-rstudio-volume
+          persistentVolumeClaim:
+            claimName: project-a-rstudio-pvc
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: {{ .Values.rstudio.podName }}
+          image: "{{ .Values.rstudio.imageRepository }}:{{ .Values.rstudio.imageTag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.rstudio.imagePullPolicy }}
           ports:
-            - name: http
-              containerPort: 8787
-              protocol: TCP
+            - containerPort: {{ .Values.rstudio.service.rstudioPort }}
+          volumeMounts:
+            - mountPath: "/home/rstudio/working-files"
+              name: user-neil-rstudio-volume
+            - mountPath: "/home/rstudio/project-a-files"
+              name: project-a-rstudio-volume
           env:
-            - name: PASSWORD
-              value: "mypass"
-            - name: ROOT
-              value: "TRUE"
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            - name: {{ .Values.rstudio.env.firstEnvName }}  #PASSWORD
+              value: {{ .Values.rstudio.env.firstEnvValue }} #"mypass"
+            - name: {{ .Values.rstudio.env.secondEnvName }} #ROOT
+              value: {{ quote .Values.rstudio.env.secondEnvValue }} #"TRUE"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

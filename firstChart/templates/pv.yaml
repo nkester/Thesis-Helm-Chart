@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: project-a-rstudio-pv
+  labels:
+    {{- include "firstChart.labels" . | nindent 4 }}
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 30Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/persistentVolumes/project-a-rstudio"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: user-neil-rstudio-pv
+  labels:
+    {{- include "firstChart.labels" . | nindent 4 }}
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 30Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/persistentVolumes/user-neil-rstudio"
