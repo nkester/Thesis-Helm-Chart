@@ -38,13 +38,10 @@ rstudio:
     # portName: docker
     # labels:
     # annotations:
-    
-    
-    
-
+ 
 imagePullSecrets: []
-nameOverride: "rstudio3"
-fullnameOverride: "rstudio3"
+nameOverride: "rstudio"
+fullnameOverride: "rstudio"
 
 serviceAccount:
   # Specifies whether a service account should be created
