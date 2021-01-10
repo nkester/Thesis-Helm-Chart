@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "firstChart.fullname" . }}
+  labels:
+    {{- include "firstChart.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "firstChart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "firstChart.selectorLabels" . | nindent 8 }}
+    spec:
+      volumes:
+        - name: user-neil-rstudio-volume
+          persistentVolumeClaim:
+            claimName: user-neil-rstudio-pvc
+        - name: project-a-rstudio-volume
+          persistentVolumeClaim:
+            claimName: project-a-rstudio-pvc
+      containers:
+        - name: {{ .Values.rstudio.podName }}
+          image: "{{ .Values.rstudio.imageRepository }}:{{ .Values.rstudio.imageTag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.rstudio.imagePullPolicy }}
+          ports:
+            - containerPort: {{ .Values.rstudio.service.rstudioPort }}
+          volumeMounts:
+            - mountPath: "/home/rstudio/personal-working-files"
+              name: user-neil-rstudio-volume
+            - mountPath: "/home/rstudio/project-a-files"
+              name: project-a-rstudio-volume
+          env:
+            - name: {{ .Values.rstudio.env.firstEnvName }}  #PASSWORD
+              value: {{ .Values.rstudio.env.firstEnvValue }} #"mypass"
+            - name: {{ .Values.rstudio.env.secondEnvName }} #ROOT
+              value: {{ quote .Values.rstudio.env.secondEnvValue }} #"TRUE"
+      initContainers:
+        - name: changeowner
+          image: busybox
+          command: ["chown","-R","1000:1000","/personal-working-files"]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: user-neil-rstudio-volume
+              mountPath: "/personal-working-files"
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

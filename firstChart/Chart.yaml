@@ -1,0 +1,8 @@
+apiVersion: v2
+name: first-rstudio-chart
+version: 0.1.0
+description: This is my first excursion into creating my own helm charts.
+type: application
+keywords:
+  - thesis
+  - test
