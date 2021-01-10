@@ -1,0 +1,16 @@
+apiVersion: v1
+entries:
+  first-rstudio-chart:
+  - apiVersion: v2
+    created: "2021-01-10T17:15:04.2739273-05:00"
+    description: This is my first excursion into creating my own helm charts.
+    digest: bcddc1273b9ba44a5000466694ce0a3dfd449abcf61b0d1bb66d8b67502deb8d
+    keywords:
+    - thesis
+    - test
+    name: first-rstudio-chart
+    type: application
+    urls:
+    - first-rstudio-chart-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-01-10T17:15:04.2715194-05:00"
