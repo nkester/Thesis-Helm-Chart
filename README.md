@@ -57,3 +57,30 @@ helm install rstudio ./firstChart/
 
 ```  
 
+# Postgres sub-chart  
+
+## Deploy Postgres From Its Own Helm Repo  
+
+Add the repo and install the chart  
+
+```{bash}
+# Add the repo 
+helm repo add bitnami https://charts.bitnami.com/bitnami
+
+# Install the chart
+helm install my-postgresql bitnami/postgresql --version 10.2.1
+
+# Return the auto-generated password
+export POSTGRES_PASSWORD=$(kubectl get secret --namespace default my-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+echo $POSTGRES_PASSWORD
+```  
+
+The notes (in stdout) will provide the host which will look something like: `my-postgresql.default.svc.cluster.local`. You can also use the clusterIP.  
+
+The connection object elements are:  
+```{bash}
+host = '<from previous step>',
+port = 5432,
+user = 'postgres',
+password = '<from previous step>' 
+```
