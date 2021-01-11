@@ -20,7 +20,7 @@ rstudio:
   imagePullPolicy: IfNotPresent
   env:
     firstEnvName: PASSWORD
-    firstEnvValue: "mypass2"
+    firstEnvValue: "mypass"
     secondEnvName: ROOT
     secondEnvValue: "TRUE"
   resources: {}
@@ -38,6 +38,11 @@ rstudio:
     # portName: docker
     # labels:
     # annotations:
+ 
+postgresql:
+  enabled: true
+  postgresqlPassword: mypass
+  
  
 imagePullSecrets: []
 nameOverride: "rstudio"

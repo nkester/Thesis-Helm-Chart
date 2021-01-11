@@ -51,11 +51,11 @@ https://helm.sh/docs/topics/charts/
 
 Navigate to the root folder of this project. Execute the following command to install the chart:  
 
-```{bash}
+``
 
-helm install rstudio ./firstChart/
+helm install rstudio ./firstChart/ --namespace default
 
-```  
+``
 
 # Postgres sub-chart  
 
@@ -84,3 +84,13 @@ port = 5432,
 user = 'postgres',
 password = '<from previous step>' 
 ```
+
+** The Ubuntu dependency required to connect to a PostgreSQL database is libpq-dev**  
+
+# Postgres as a dependency  
+
+Decide to include the postgres image by entering `true` for `.Values.postgresql.enabled`
+Likewise, provide the databases' password in `.Values.postgresql.postgresqlPassword`
+
+**Need to pass up the ability to determine if the database is persistent or not. 
+ 
