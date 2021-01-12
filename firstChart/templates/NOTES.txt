@@ -20,3 +20,15 @@
   echo "Visit http://127.0.0.1:8080 to use your application"
   kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
 {{- end }}
+
+{{- if .Values.postgresql.enabled }}
+
+2. PostgreSQL can be accessed via port 5432 on the following DNS name from within your cluster:
+
+  Execute kubectl get svc --namespace <your namespace>
+    The pg service with a cluster IP (not headless) should be combined with the following information to create the host: <service name>.<namespace>.svc.cluster.local
+    The user is 'postgres'
+    The port is 5432
+    The password is: '{{ .Values.postgresql.postgresqlPassword }}'
+    
+{{- end}}
