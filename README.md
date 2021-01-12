@@ -51,9 +51,46 @@ https://helm.sh/docs/topics/charts/
 
 Navigate to the root folder of this project. Execute the following command to install the chart:  
 
+``
+
+helm install rstudio ./firstChart/ --namespace default
+
+``
+
+# Postgres sub-chart  
+
+## Deploy Postgres From Its Own Helm Repo  
+
+Add the repo and install the chart  
+
 ```{bash}
+# Add the repo 
+helm repo add bitnami https://charts.bitnami.com/bitnami
 
-helm install rstudio ./firstChart/
+# Install the chart
+helm install my-postgresql bitnami/postgresql --version 10.2.1
 
+# Return the auto-generated password
+export POSTGRES_PASSWORD=$(kubectl get secret --namespace default my-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+echo $POSTGRES_PASSWORD
 ```  
 
+The notes (in stdout) will provide the host which will look something like: `my-postgresql.default.svc.cluster.local`. You can also use the clusterIP.  
+
+The connection object elements are:  
+```{bash}
+host = '<from previous step>',
+port = 5432,
+user = 'postgres',
+password = '<from previous step>' 
+```
+
+** The Ubuntu dependency required to connect to a PostgreSQL database is libpq-dev**  
+
+# Postgres as a dependency  
+
+Decide to include the postgres image by entering `true` for `.Values.postgresql.enabled`
+Likewise, provide the databases' password in `.Values.postgresql.postgresqlPassword`
+
+**Need to pass up the ability to determine if the database is persistent or not. 
+ 

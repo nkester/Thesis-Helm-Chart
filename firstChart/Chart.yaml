@@ -1,8 +1,15 @@
 apiVersion: v2
-name: first-rstudio-chart
-version: 0.1.0
-description: This is my first excursion into creating my own helm charts.
+name: neils-analytic-environment-chart
+version: 0.1.1
+description: This chart will deploy an analytic environment with the user's choice of database management system.
 type: application
+
 keywords:
   - thesis
   - test
+  
+dependencies:
+  - name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.2.x
+    condition: postgresql.enabled
