@@ -16,7 +16,7 @@ deploymentStrategy: {}
 rstudio:
   podName: rstudio-server
   imageRepository: rocker/rstudio
-  imageTag: 4.0.3
+  imageTag: 3.6.3 #4.0.3
   imagePullPolicy: IfNotPresent
   env:
     firstEnvName: PASSWORD
@@ -39,10 +39,39 @@ rstudio:
     # labels:
     # annotations:
  
+# Values passed to the dependent postgres chart
 postgresql:
   enabled: true
+  postgresqlUsername: postgres
   postgresqlPassword: mypass
-  
+  service:
+    type: ClusterIP
+    port: 5432
+  persistence:
+    enabled: false
+    # If an existing pvc exists (created prior to this chart) it can be passed here.
+    # existingClaim: 
+    
+    ## The path the volume will be mounted at, useful when using different
+    ## PostgreSQL images.
+    ##
+    mountPath: /bitnami/postgresql
+
+    ## The subdirectory of the volume to mount to, useful in dev environments
+    ## and one PV for multiple services.
+    ##
+    subPath: ''
+
+    # storageClass: "-"
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+    annotations: {}
+    ## selector can be used to match an existing PersistentVolume
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    selector: {}
  
 imagePullSecrets: []
 nameOverride: "rstudio"
