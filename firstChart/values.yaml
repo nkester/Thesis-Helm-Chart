@@ -23,6 +23,11 @@ rstudio:
     firstEnvValue: "mypass"
     secondEnvName: ROOT
     secondEnvValue: "TRUE"
+  persistentStorage:
+    firstVolName: project-a-rstudio-volume
+    firstClaimName: project-a-rstudio-pvc
+    secondVolName: user-neil-rstudio-volume
+    secondClaimName: user-neil-rstudio-pvc
   resources: {}
     # cpu: 250m
     # memory: 4800Mi
@@ -50,7 +55,7 @@ postgresql:
   persistence:
     enabled: false
     # If an existing pvc exists (created prior to this chart) it can be passed here.
-    # existingClaim: 
+    existingClaim: pg-pvc
     
     ## The path the volume will be mounted at, useful when using different
     ## PostgreSQL images.

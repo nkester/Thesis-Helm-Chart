@@ -21,12 +21,12 @@ spec:
         {{- include "firstChart.selectorLabels" . | nindent 8 }}
     spec:
       volumes:
-        - name: user-neil-rstudio-volume
+        - name: {{ .Values.rstudio.persistentStorage.firstVolName }}
           persistentVolumeClaim:
-            claimName: user-neil-rstudio-pvc
-        - name: project-a-rstudio-volume
+            claimName: {{ .Values.rstudio.persistentStorage.firstClaimName }}
+        - name: {{ .Values.rstudio.persistentStorage.secondVolName }}
           persistentVolumeClaim:
-            claimName: project-a-rstudio-pvc
+            claimName: {{ .Values.rstudio.persistentStorage.secondClaimName }}
       containers:
         - name: {{ .Values.rstudio.podName }}
           image: "{{ .Values.rstudio.imageRepository }}:{{ .Values.rstudio.imageTag | default .Chart.AppVersion }}"
@@ -35,23 +35,31 @@ spec:
             - containerPort: {{ .Values.rstudio.service.rstudioPort }}
           volumeMounts:
             - mountPath: "/home/rstudio/personal-working-files"
-              name: user-neil-rstudio-volume
+              name: {{ .Values.rstudio.persistentStorage.secondVolName }}
             - mountPath: "/home/rstudio/project-a-files"
-              name: project-a-rstudio-volume
+              name: {{ .Values.rstudio.persistentStorage.firstVolName }}
           env:
             - name: {{ .Values.rstudio.env.firstEnvName }}  #PASSWORD
               value: {{ .Values.rstudio.env.firstEnvValue }} #"mypass"
             - name: {{ .Values.rstudio.env.secondEnvName }} #ROOT
               value: {{ quote .Values.rstudio.env.secondEnvValue }} #"TRUE"
       initContainers:
-        - name: changeowner
+        - name: changeowner-one
           image: busybox
           command: ["chown","-R","1000:1000","/personal-working-files"]
           securityContext:
             runAsUser: 0
           volumeMounts:
-            - name: user-neil-rstudio-volume
+            - name: {{ .Values.rstudio.persistentStorage.secondVolName }}
               mountPath: "/personal-working-files"
+        - name: changeowner-two
+          image: busybox
+          command: ["chown","-R","1000:1000","/project-a-files"]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: {{ .Values.rstudio.persistentStorage.firstVolName }}
+              mountPath: "/project-a-files"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
