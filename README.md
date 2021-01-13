@@ -87,10 +87,32 @@ password = '<from previous step>'
 
 ** The Ubuntu dependency required to connect to a PostgreSQL database is libpq-dev**  
 
-# Postgres as a dependency  
+## Postgres as a dependency  
 
 Decide to include the postgres image by entering `true` for `.Values.postgresql.enabled`
 Likewise, provide the databases' password in `.Values.postgresql.postgresqlPassword`
 
 **Need to pass up the ability to determine if the database is persistent or not. 
- 
+
+
+# Persistent Storage
+
+**This is temporary. The long term solution is to create stateful sets**
+
+Create the persistent volume and persistent volume claim before deploying the rstudio helm chart. Do this by executing the two commands from within the `./persistentStorage` directory. Before doing this ensure you have created the proper pv and pvc resources in their corresponding manifestes.  
+
+Note, if you want to use a specific namespace, create it first with `kubectl create ns <namespace>`  
+
+```{bash}
+kubectl apply -f ./pv.yaml --namespace <specific namespace>
+
+kubectl apply -f ./pvc.yaml --namespace <specific namespace>
+```  
+
+At this point update the `values.yaml` with the volume and claim names under the `.Vales.rstudio.persistentStorage` and `.Values.postgresql.persistence.existingClaim` location.  
+
+Now you can install the helm chart as normal. Ensure you install it into the same namespace as you previously applied the pv.yaml and pvc.yaml files.  
+
+
+
+
