@@ -13,3 +13,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     version: 10.2.x
     condition: postgresql.enabled
+  - name: mongodb
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.3.x
+    condition: mongodb.enabled

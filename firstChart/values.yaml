@@ -46,7 +46,7 @@ rstudio:
  
 # Values passed to the dependent postgres chart
 postgresql:
-  enabled: true
+  enabled: false
   postgresqlUsername: postgres
   postgresqlPassword: mypass
   service:
@@ -78,6 +78,26 @@ postgresql:
     ##     app: my-app
     selector: {}
  
+
+monogodb:
+  enabled: true
+  auth:
+    enabled: true
+    rootPassword: ""
+  persistence:
+    enabled: true
+    # Requires mongodb.persistence.enabled: true
+    # If defined, PVC must be created manually before the volume will be bound
+    # existingClaim: 
+    accessModes:
+      - ReadWriteOnce
+    size: 8Gi
+  
+  
+
+
+
+
 imagePullSecrets: []
 nameOverride: "rstudio"
 fullnameOverride: "rstudio"
