@@ -83,7 +83,7 @@ monogodb:
   enabled: true
   auth:
     enabled: true
-    rootPassword: ""
+    rootPassword: "mypass"
   persistence:
     enabled: true
     # Requires mongodb.persistence.enabled: true
