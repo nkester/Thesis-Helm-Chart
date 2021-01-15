@@ -150,6 +150,14 @@ MongoDB uses objects in a different way than how most R users are used to. This 
 
 Another great resource is the [MongoDB Manual](https://docs.mongodb.com/manual/introduction/)
 
+# Jupyter Hub  
+
+Use references here:
+
+[Jupyter Hub Helm Charts|https://jupyterhub.github.io/helm-chart/] 
+
+[How to deploy helm chart|https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/installation.html]
+
 
 `
 
