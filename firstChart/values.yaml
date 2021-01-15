@@ -80,7 +80,7 @@ postgresql:
  
 
 mongodb:
-#  enabled: true
+  enabled: true
   ## Kubernetes Cluster Domain
   ##
 #  clusterDomain: cluster.local
@@ -116,17 +116,7 @@ mongodb:
 #    type: LoadBalancer
     ## Port used when service type is LoadBalancer
     ##
-#    port: 27017
-#  initContainers:
-#    - name: changeowner-three
-#      image: busybox
-#      command: ["chown","-R","1000:1000","/bitnami/mongodb"]
-#      securityContext:
-#        runAsUser: 0
-#      volumeMounts:
-#        - name: mongodb-pv
-#          mountPath: "/bitnami/mongodb"
-  
+#    port: 27017 
   
 
 
@@ -135,7 +125,6 @@ mongodb:
 imagePullSecrets: []
 nameOverride: "rstudio"
 fullnameOverride: "rstudio"
-mongodbenabled: true
 
 
 serviceAccount:

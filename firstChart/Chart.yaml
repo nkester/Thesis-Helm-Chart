@@ -1,6 +1,6 @@
 apiVersion: v2
 name: neils-analytic-environment-chart
-version: 0.3.1
+version: 0.3.2
 description: This chart will deploy an analytic environment with the user's choice of database management system. Includes RStudio, PostgreSQL, and MongoDB.
 type: application
 
@@ -16,4 +16,4 @@ dependencies:
   - name: mongodb
     repository: https://charts.bitnami.com/bitnami
     version: 10.3.x
-    condition: mongodbenabled
+    condition: mongodb.enabled
