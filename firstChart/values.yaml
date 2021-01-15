@@ -46,7 +46,7 @@ rstudio:
  
 # Values passed to the dependent postgres chart
 postgresql:
-  enabled: true
+  enabled: false
   postgresqlUsername: postgres
   postgresqlPassword: mypass
   service:
@@ -78,9 +78,54 @@ postgresql:
     ##     app: my-app
     selector: {}
  
+
+mongodb:
+  enabled: true
+  ## Kubernetes Cluster Domain
+  ##
+#  clusterDomain: cluster.local
+  ## MongoDB architecture. Allowed values: standalone or replicaset
+  ##
+#  architecture: standalone
+#  externalAccess:
+#    enabled: false
+#  auth:
+#    enabled: true
+#    rootPassword: "mypass"
+    ## MongoDB custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
+    ##
+    # username: username
+    # password: password
+    # database: database
+  volumePermissions:
+    enabled: true
+    
+  persistence:
+    enabled: true
+    
+    # Requires mongodb.persistence.enabled: true
+    # If defined, PVC must be created manually before the volume will be bound
+    existingClaim: mongo-pvc
+#    accessModes:
+#      - ReadWriteOnce
+#    size: 8Gi
+#  service:
+    ## Service type. Allowed values: LoadBalancer or NodePort
+    ##
+#    type: LoadBalancer
+    ## Port used when service type is LoadBalancer
+    ##
+#    port: 27017 
+  
+
+
+
+
 imagePullSecrets: []
 nameOverride: "rstudio"
 fullnameOverride: "rstudio"
+
 
 serviceAccount:
   # Specifies whether a service account should be created

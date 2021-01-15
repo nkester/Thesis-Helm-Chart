@@ -113,6 +113,44 @@ At this point update the `values.yaml` with the volume and claim names under the
 
 Now you can install the helm chart as normal. Ensure you install it into the same namespace as you previously applied the pv.yaml and pvc.yaml files.  
 
+# MongoDB  
 
+## Install as its own chart 
+
+[bitnami website](https://bitnami.com/stack/mongodb/helm) 
+
+```{bash}
+# on WSL
+helm add repo bitnami https://charts.bitnami.com/bitnami
+
+kubectl create ns mongo-test 
+
+helm install test-mongo bitnami/mongodb --namespace mongo-test
+
+```  
+
+The stdout response will provide all of the required information to connect to the instance.
+
+Access it from RStudio by installing the rstudio helm chart. Before installing mongolite with `install.package('mongolite')` you need to install the following Ubuntu libraries: libssl-dev, libsasl2-dev, and libz-dev. Remember to run `sudo apt update` before doing this to update the repository.  
+
+In your WSL2 retrive the root password as instructed in the stdout by running the command that starts with `export MONGODB_ROOT_PASSWORD=..`  
+
+Return the password with `echo $MONGODB_ROOT_PASSWORD`  
+
+In RStudio connect to the mongoDB with the following command: 
+`con <- mongolite::mongo(url = 'mongodb://<username>:<Root Password>@<DNS name>')`  
+
+In my example the command was:
+`con <- mongolite::mongo(url = 'mongodb://root:LfbsEuli94@test-mongo-mongodb.mongo-test.svc.cluster.local/')`
+
+This produces an object with various methods associated with it. List all data in the connected database with:  
+`con$find('{}')`  
+
+MongoDB uses objects in a different way than how most R users are used to. This [Mongolite User Manual](https://jeroen.github.io/mongolite/index.html) may be helpful.  
+
+Another great resource is the [MongoDB Manual](https://docs.mongodb.com/manual/introduction/)
+
+
+`
 
 
