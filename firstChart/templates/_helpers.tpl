@@ -60,3 +60,17 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+Allow the release namespace to be overridden for multi-namespace deployments in combined charts.
+*/}}
+{{- define "firstChart.namespace" -}}
+    {{- if .Values.global -}}
+        {{- if .Values.global.namespaceOverride }}
+            {{- .Values.global.namespaceOverride -}}
+        {{- else -}}
+            {{- .Release.Namespace -}}
+        {{- end -}}
+    {{- else -}}
+        {{- .Release.Namespace -}}
+    {{- end }}
+{{- end -}}

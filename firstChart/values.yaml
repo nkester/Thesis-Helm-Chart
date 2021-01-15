@@ -79,19 +79,53 @@ postgresql:
     selector: {}
  
 
-monogodb:
-  enabled: true
-  auth:
+mongodb:
+#  enabled: true
+  ## Kubernetes Cluster Domain
+  ##
+#  clusterDomain: cluster.local
+  ## MongoDB architecture. Allowed values: standalone or replicaset
+  ##
+#  architecture: standalone
+#  externalAccess:
+#    enabled: false
+#  auth:
+#    enabled: true
+#    rootPassword: "mypass"
+    ## MongoDB custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
+    ##
+    # username: username
+    # password: password
+    # database: database
+  volumePermissions:
     enabled: true
-    rootPassword: "mypass"
+    
   persistence:
     enabled: true
+    
     # Requires mongodb.persistence.enabled: true
     # If defined, PVC must be created manually before the volume will be bound
-    # existingClaim: 
-    accessModes:
-      - ReadWriteOnce
-    size: 8Gi
+    existingClaim: mongo-pvc
+#    accessModes:
+#      - ReadWriteOnce
+#    size: 8Gi
+#  service:
+    ## Service type. Allowed values: LoadBalancer or NodePort
+    ##
+#    type: LoadBalancer
+    ## Port used when service type is LoadBalancer
+    ##
+#    port: 27017
+#  initContainers:
+#    - name: changeowner-three
+#      image: busybox
+#      command: ["chown","-R","1000:1000","/bitnami/mongodb"]
+#      securityContext:
+#        runAsUser: 0
+#      volumeMounts:
+#        - name: mongodb-pv
+#          mountPath: "/bitnami/mongodb"
   
   
 
@@ -101,6 +135,8 @@ monogodb:
 imagePullSecrets: []
 nameOverride: "rstudio"
 fullnameOverride: "rstudio"
+mongodbenabled: true
+
 
 serviceAccount:
   # Specifies whether a service account should be created

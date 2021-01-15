@@ -48,4 +48,4 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/persistentVolumes/mongo-pv"
+    path: "/bitnami/mongodb"
