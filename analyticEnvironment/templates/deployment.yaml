@@ -34,9 +34,9 @@ spec:
           ports:
             - containerPort: {{ .Values.rstudio.service.rstudioPort }}
           volumeMounts:
-            - mountPath: "/home/rstudio/personal-working-files"
+            - mountPath: {{ .Values.rstudio.persistentStorage.secondMountPath }}
               name: {{ .Values.rstudio.persistentStorage.secondVolName }}
-            - mountPath: "/home/rstudio/project-a-files"
+            - mountPath: {{ .Values.rstudio.persistentStorage.firstMountPath }}
               name: {{ .Values.rstudio.persistentStorage.firstVolName }}
           env:
             - name: {{ .Values.rstudio.env.firstEnvName }}  #PASSWORD
@@ -46,20 +46,20 @@ spec:
       initContainers:
         - name: changeowner-one
           image: busybox
-          command: ["chown","-R","1000:1000","/personal-working-files"]
+          command: ["chown","-R","1000:1000","/home/rstudio/personal-working-files"]
           securityContext:
             runAsUser: 0
           volumeMounts:
             - name: {{ .Values.rstudio.persistentStorage.secondVolName }}
-              mountPath: "/personal-working-files"
+              mountPath: {{ .Values.rstudio.persistentStorage.secondMountPath }}
         - name: changeowner-two
           image: busybox
-          command: ["chown","-R","1000:1000","/project-a-files"]
+          command: ["chown","-R","1000:1000","/home/rstudio/project-analytics-files"]
           securityContext:
             runAsUser: 0
           volumeMounts:
             - name: {{ .Values.rstudio.persistentStorage.firstVolName }}
-              mountPath: "/project-a-files"
+              mountPath: {{ .Values.rstudio.persistentStorage.firstMountPath }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

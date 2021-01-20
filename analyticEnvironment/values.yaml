@@ -15,8 +15,8 @@ deploymentStrategy: {}
 # Information for the first image, rstudio
 rstudio:
   podName: rstudio-server
-  imageRepository: rocker/rstudio
-  imageTag: 4.0.3 #3.6.3
+  imageRepository: docker.io/neilkester/thesis-rstudio #rocker/rstudio
+  imageTag: v1.2 #4.0.3 #3.6.3
   imagePullPolicy: IfNotPresent
   env:
     firstEnvName: PASSWORD
@@ -26,8 +26,10 @@ rstudio:
   persistentStorage:
     firstVolName: project-analytics-rstudio-volume
     firstClaimName: project-analytics-rstudio-pvc
+    firstMountPath: "/home/rstudio/project-analytics-files"
     secondVolName: user-neil-rstudio-volume
     secondClaimName: user-neil-rstudio-pvc
+    secondMountPath: "/home/rstudio/personal-working-files"
   resources: {}
     # cpu: 250m
     # memory: 4800Mi

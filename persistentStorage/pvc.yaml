@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: project-analytics-rstudio-pvc
 spec:
-  storageClassName: ""
+  storageClassName: manual #""
   accessModes:
     - ReadWriteOnce
   resources:
@@ -16,7 +16,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: user-neil-rstudio-pvc
 spec:
-  storageClassName: ""
+  storageClassName: manual #""""
   accessModes:
     - ReadWriteOnce
   resources:
@@ -29,7 +29,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: analytics-pg-pvc
 spec:
-  storageClassName: ""
+  storageClassName: manual #""""
   accessModes:
     - ReadWriteOnce
   resources:
@@ -42,7 +42,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: analytics-mongodb-pvc
 spec:
-  storageClassName: ""
+  storageClassName: manual #""""
   accessModes:
     - ReadWriteOnce
   resources:
