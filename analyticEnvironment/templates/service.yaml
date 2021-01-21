@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "analyticEnvironment.fullname" . }}
+  labels:
+    {{- include "analyticEnvironment.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.rstudio.service.type }}
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.rstudio.service.rstudioPort }}
+      nodePort: {{ .Values.rstudio.service.PodPort }}
+      
+  selector:
+    {{- include "analyticEnvironment.selectorLabels" . | nindent 4 }}
+
+

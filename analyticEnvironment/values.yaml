@@ -1,0 +1,180 @@
+# This is a place holder for now. 
+statefulset:
+  enabled: false
+
+# Replica Count
+replicaCount: 1
+
+# Specify the deployment strategy. The provided are defaults
+deploymentStrategy: {}
+  # rollingUpdate:
+  #   maxSurge: 25%
+  #   maxUnavailable: 25%
+  # type: RollingUpdate
+
+# Information for the first image, rstudio
+rstudio:
+  podName: rstudio-server
+  imageRepository: docker.io/neilkester/thesis-rstudio #rocker/rstudio
+  imageTag: v1.2 #4.0.3 #3.6.3
+  imagePullPolicy: IfNotPresent
+  env:
+    firstEnvName: PASSWORD
+    firstEnvValue: "mypass"
+    secondEnvName: ROOT
+    secondEnvValue: "TRUE"
+  persistentStorage:
+    firstVolName: project-analytics-rstudio-volume
+    firstClaimName: project-analytics-rstudio-pvc
+    firstMountPath: "/home/rstudio/project-analytics-files"
+    secondVolName: user-neil-rstudio-volume
+    secondClaimName: user-neil-rstudio-pvc
+    secondMountPath: "/home/rstudio/personal-working-files"
+  resources: {}
+    # cpu: 250m
+    # memory: 4800Mi
+  service:
+    type: NodePort
+    rstudioPort: 8787
+    podPort: 30633 #or 8787
+    portProtocol: TCP
+    # clusterIP: None
+  route: {}
+    # enabled: false
+    # name: docker
+    # portName: docker
+    # labels:
+    # annotations:
+ 
+# Values passed to the dependent postgres chart
+postgresql:
+  enabled: true
+  postgresqlUsername: postgres
+  postgresqlPassword: mypass
+  service:
+    type: ClusterIP
+    port: 5432
+  persistence:
+    enabled: false
+    # If an existing pvc exists (created prior to this chart) it can be passed here.
+    existingClaim: analytics-pg-pvc
+    
+    ## The path the volume will be mounted at, useful when using different
+    ## PostgreSQL images.
+    ##
+    mountPath: /bitnami/postgresql
+
+    ## The subdirectory of the volume to mount to, useful in dev environments
+    ## and one PV for multiple services.
+    ##
+    subPath: ''
+
+    # storageClass: "-"
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+    annotations: {}
+    ## selector can be used to match an existing PersistentVolume
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    selector: {}
+ 
+
+mongodb:
+  enabled: true
+  ## Kubernetes Cluster Domain
+  ##
+#  clusterDomain: cluster.local
+  ## MongoDB architecture. Allowed values: standalone or replicaset
+  ##
+#  architecture: standalone
+#  externalAccess:
+#    enabled: false
+  auth:
+    enabled: true
+    rootPassword: "mypass"
+    ## MongoDB custom user and database
+    ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
+    ##
+    username: "modeler"
+    password: "C8dsdfwS=C^"
+    database: "modelResults"
+  volumePermissions:
+    enabled: true
+    
+  persistence:
+    enabled: true
+    
+    # Requires mongodb.persistence.enabled: true
+    # If defined, PVC must be created manually before the volume will be bound
+    existingClaim: analytics-mongodb-pvc
+#    accessModes:
+#      - ReadWriteOnce
+#    size: 8Gi
+#  service:
+    ## Service type. Allowed values: LoadBalancer or NodePort
+    ##
+#    type: LoadBalancer
+    ## Port used when service type is LoadBalancer
+    ##
+#    port: 27017 
+  
+
+
+
+
+imagePullSecrets: []
+nameOverride: "analytics"
+fullnameOverride: "analytics"
+
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
