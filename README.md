@@ -158,7 +158,12 @@ Use references here:
 
 [How to deploy helm chart|https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/installation.html]
 
+Install Jupyter Hub with `helm install jhub jupyterhub/jupyterhub --values ./config.yaml` where the config.yaml file is configured according to the second reference. 
 
+Once the chart deploys find the public-proxy service's port with: `kubectl get --namespace neil-ns -o jsonpath="{.spec.ports[0].nodePort}" services proxy-public`  
+Get the cluster's external IP with: `kubectl get nodes --namespace neil-ns -o jsonpath="{.items[0].status.addresses[0].address}"`
+
+Use these to log into the server.
 `
 
 
