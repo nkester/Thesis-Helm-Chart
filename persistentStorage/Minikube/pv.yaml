@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: project-analytics-rstudio-pv
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 0.5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/persistentVolumes/project-analytics-rstudio"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: user-neil-rstudio-pv
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 0.5Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/persistentVolumes/user-neil-rstudio"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: analytics-pg-pv
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 0.5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/persistentVolumes/pg-pv"
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: analytics-mongodb-pv
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 0.5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/bitnami/mongodb"
