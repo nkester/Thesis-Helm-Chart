@@ -3,49 +3,41 @@ kind: PersistentVolume
 metadata:
   name: project-analytics-rstudio-pv
 spec:
-  storageClassName: manual
+  storageClassName: ""
   capacity:
     storage: 2Gi
   accessModes:
     - ReadWriteOnce
-  hostPath:
-    path: "/persistentVolumes/project-analytics-rstudio"
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: user-neil-rstudio-pv
 spec:
-  storageClassName: manual
+  storageClassName: ""
   capacity:
     storage: 300Mi
   accessModes:
     - ReadWriteOnce
-  hostPath:
-    path: "/persistentVolumes/user-neil-rstudio"
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: analytics-pg-pv
 spec:
-  storageClassName: manual
+  storageClassName: ""
   capacity:
     storage: 2Gi
   accessModes:
     - ReadWriteOnce
-  hostPath:
-    path: "/persistentVolumes/pg-pv"
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: analytics-mongodb-pv
 spec:
-  storageClassName: manual
+  storageClassName: ""
   capacity:
     storage: 10Gi
   accessModes:
     - ReadWriteOnce
-  hostPath:
-    path: "/bitnami/mongodb"
