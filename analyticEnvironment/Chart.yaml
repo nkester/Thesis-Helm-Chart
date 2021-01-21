@@ -1,0 +1,25 @@
+apiVersion: v2
+name: analyticEnvironment
+description: This chart will deploy an analytic environment with the user's choice of database management system. Includes RStudio, Jupyter, PostgreSQL, and MongoDB.
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 0.4.0
+
+keywords:
+  - jhu
+  - thesis
+  - analyticsEnvironment
+  - MSaaS
+
+dependencies:
+  - name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.2.x
+    condition: postgresql.enabled
+  - name: mongodb
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.3.x
+    condition: mongodb.enabled
