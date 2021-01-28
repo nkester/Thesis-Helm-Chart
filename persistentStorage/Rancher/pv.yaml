@@ -1,24 +1,28 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: project-analytics-rstudio-pv
+  name: analytics-rstudio-pv
 spec:
   storageClassName: ""
   capacity:
-    storage: 2Gi
+    storage: 1Gi
   accessModes:
     - ReadWriteOnce
+  hostPath:
+    path: "/dev/sda1/analytics"
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: user-neil-rstudio-pv
+  name: analytics-jupyter-pv
 spec:
   storageClassName: ""
   capacity:
-    storage: 300Mi
+    storage: 1Gi
   accessModes:
     - ReadWriteOnce
+  hostPath:
+    path: "/dev/sda1/analytics"
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -27,9 +31,11 @@ metadata:
 spec:
   storageClassName: ""
   capacity:
-    storage: 2Gi
+    storage: 5Gi
   accessModes:
     - ReadWriteOnce
+  hostPath:
+    path: "/dev/sda1/analytics"
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -41,3 +47,5 @@ spec:
     storage: 10Gi
   accessModes:
     - ReadWriteOnce
+  hostPath:
+    path: "/dev/sda1/analytics"

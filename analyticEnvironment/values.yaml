@@ -25,11 +25,11 @@ rstudio:
     secondEnvValue: "TRUE"
   persistentStorage:
     firstVolName: project-analytics-rstudio-volume
-    firstClaimName: project-analytics-rstudio-pvc
+    firstClaimName: analytics-rstudio-pvc
     firstMountPath: "/home/rstudio/project-analytics-files"
-    secondVolName: user-neil-rstudio-volume
-    secondClaimName: user-neil-rstudio-pvc
-    secondMountPath: "/home/rstudio/personal-working-files"
+#    secondVolName: user-neil-rstudio-volume
+#    secondClaimName: user-neil-rstudio-pvc
+#    secondMountPath: "/home/rstudio/personal-working-files"
   resources: {}
     # cpu: 250m
     # memory: 4800Mi
@@ -55,7 +55,7 @@ postgresql:
     type: ClusterIP
     port: 5432
   persistence:
-    enabled: false
+    enabled: true
     # If an existing pvc exists (created prior to this chart) it can be passed here.
     existingClaim: analytics-pg-pvc
     
@@ -67,12 +67,12 @@ postgresql:
     ## The subdirectory of the volume to mount to, useful in dev environments
     ## and one PV for multiple services.
     ##
-    subPath: ''
+    #subPath: ''
 
     # storageClass: "-"
-    accessModes:
-      - ReadWriteOnce
-    size: 1Gi
+    #accessModes:
+    #  - ReadWriteOnce
+    #size: 10Gi
     annotations: {}
     ## selector can be used to match an existing PersistentVolume
     ## selector:
