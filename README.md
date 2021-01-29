@@ -150,7 +150,20 @@ MongoDB uses objects in a different way than how most R users are used to. This 
 
 Another great resource is the [MongoDB Manual](https://docs.mongodb.com/manual/introduction/)
 
+# Jupyter Hub  
 
+Use references here:
+
+[Jupyter Hub Helm Charts|https://jupyterhub.github.io/helm-chart/] 
+
+[How to deploy helm chart|https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/installation.html]
+
+Install Jupyter Hub with `helm install jhub jupyterhub/jupyterhub --values ./config.yaml` where the config.yaml file is configured according to the second reference. 
+
+Once the chart deploys find the public-proxy service's port with: `kubectl get --namespace neil-ns -o jsonpath="{.spec.ports[0].nodePort}" services proxy-public`  
+Get the cluster's external IP with: `kubectl get nodes --namespace neil-ns -o jsonpath="{.items[0].status.addresses[0].address}"`
+
+Use these to log into the server.
 `
 
 

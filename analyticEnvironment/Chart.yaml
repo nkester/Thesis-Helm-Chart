@@ -23,3 +23,7 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     version: 10.3.x
     condition: mongodb.enabled
+  - name: jupyterhub
+    repository: https://jupyterhub.github.io/helm-chart/
+    version: 0.11.x
+    condition: jupyterhub.enabled
