@@ -48,7 +48,7 @@ rstudio:
  
 # Values passed to the dependent postgres chart
 postgresql:
-  enabled: true
+  enabled: false
   postgresqlUsername: postgres
   postgresqlPassword: mypass
   service:
@@ -82,7 +82,7 @@ postgresql:
  
 
 mongodb:
-  enabled: true
+  enabled: false
   ## Kubernetes Cluster Domain
   ##
 #  clusterDomain: cluster.local
@@ -123,6 +123,30 @@ mongodb:
 
 
 
+
+jupyterhub:
+  enabled: true
+  proxy:
+    secretToken: "c6e0518cd4d29642aaee17e3ecdd4e730e2dd3b6ed0f738224798fdbd26e5826"
+  singleuser:
+    storage:
+      extraVolumes:
+        - name: analytic-volume
+          persistentVolumeClaim:
+            claimName: analytics-jupyter-pvc
+      extraVolumeMounts:
+        - name: analytic-volume
+          mountPath: /home/jovyan/analytics
+      type: none
+    initContainers:
+      - name: changeowner-one
+        image: busybox
+        command: ["chown","-R","1000:1000","/home/jovyan/analytics"]
+        securityContext:
+          runAsUser: 0
+        volumeMounts:
+          - name: analytic-volume
+            mountPath: /home/jovyan/analytics
 
 imagePullSecrets: []
 nameOverride: "analytics"
