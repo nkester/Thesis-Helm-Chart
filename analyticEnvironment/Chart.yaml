@@ -6,7 +6,7 @@ type: application
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
 # Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.4.0
+version: 0.5.0
 
 keywords:
   - jhu
@@ -23,7 +23,3 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     version: 10.3.x
     condition: mongodb.enabled
-  - name: jupyterhub
-    repository: https://jupyterhub.github.io/helm-chart/
-    version: 0.11.x
-    condition: jupyterhub.enabled
