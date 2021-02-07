@@ -48,7 +48,7 @@ rstudio:
  
 # Values passed to the dependent postgres chart
 postgresql:
-  enabled: true
+  enabled: false
   postgresqlUsername: postgres
   postgresqlPassword: mypass
   service:
