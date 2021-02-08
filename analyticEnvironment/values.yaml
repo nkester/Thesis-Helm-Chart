@@ -25,7 +25,7 @@ rstudio:
     secondEnvValue: "TRUE"
   persistentStorage:
     firstVolName: project-analytics-rstudio-volume
-    firstClaimName: analytics-rstudio-pvc
+    firstClaimName: analytics-local-rstudio-pvc
     firstMountPath: "/home/rstudio/project-analytics-files"
 #    secondVolName: user-neil-rstudio-volume
 #    secondClaimName: user-neil-rstudio-pvc
@@ -107,7 +107,7 @@ mongodb:
     
     # Requires mongodb.persistence.enabled: true
     # If defined, PVC must be created manually before the volume will be bound
-    existingClaim: analytics-mongodb-pvc
+    existingClaim: analytics-local-mongodb-pvc
 #    accessModes:
 #      - ReadWriteOnce
 #    size: 8Gi
@@ -122,8 +122,8 @@ mongodb:
 
 
 imagePullSecrets: []
-nameOverride: "analytics"
-fullnameOverride: "analytics"
+nameOverride: "local-analytics-rstudio"
+fullnameOverride: "local-analytics"
 
 
 serviceAccount:

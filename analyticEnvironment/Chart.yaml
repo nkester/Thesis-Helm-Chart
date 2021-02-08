@@ -17,9 +17,9 @@ keywords:
 dependencies:
   - name: postgresql
     repository: https://charts.bitnami.com/bitnami
-    version: 10.2.x
+    version: 10.2.6
     condition: postgresql.enabled
   - name: mongodb
     repository: https://charts.bitnami.com/bitnami
-    version: 10.3.x
+    version: 10.3.6
     condition: mongodb.enabled
