@@ -165,5 +165,13 @@ Get the cluster's external IP with: `kubectl get nodes --namespace neil-ns -o js
 
 Use these to log into the server.
 `
+# Persistent Volumes  
 
+This approach uses `local` volumes because the current NVESD Cluster is not correctly provisioned to use `awsElasticBlockStore` volumes.  
+
+See the reference [here](https://kubernetes.io/docs/concepts/storage/volumes/#local) for information about the approach from the kubernetes.io reference. In short, this is a more durable and portable solution than `hostPath`.  
+
+Create a `Storage Class` for the `local` volume type based on the [kubernetes.io documentation](https://kubernetes.io/docs/concepts/storage/storage-classes/#local)  
+
+**IMPORTANT:** When using the `local` volume type, the folder paths must exist. If they do not, the initContainer will not have anything to reference. To fix this, I have created another pv and pvc for the appropriate local drive directory (in this case /dev/sda1/) and mounted it to a basic ubuntu container. With this pod running, I ran `kubectl exec -it <pod name> -- bash` from my WSL2 to enter the pod and create the required directories. The initContainers for each service will change the file permissions as required.
 

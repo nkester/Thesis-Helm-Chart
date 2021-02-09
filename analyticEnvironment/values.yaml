@@ -83,14 +83,6 @@ postgresql:
 
 mongodb:
   enabled: true
-  ## Kubernetes Cluster Domain
-  ##
-#  clusterDomain: cluster.local
-  ## MongoDB architecture. Allowed values: standalone or replicaset
-  ##
-#  architecture: standalone
-#  externalAccess:
-#    enabled: false
   auth:
     enabled: true
     rootPassword: "mypass"
@@ -102,15 +94,19 @@ mongodb:
     database: "modelResults"
   volumePermissions:
     enabled: true
+  architecture: standalone
   persistence:
     enabled: true
-    
     # Requires mongodb.persistence.enabled: true
     # If defined, PVC must be created manually before the volume will be bound
     existingClaim: analytics-local-mongodb-pvc
-#    accessModes:
-#      - ReadWriteOnce
-#    size: 8Gi
+    storageClassName: "analytic-local-storage" #"-"
+    accessModes:
+      - ReadWriteOnce
+    size: 10Gi
+
+#  arbiter:
+#    enabled: false
 #  service:
     ## Service type. Allowed values: LoadBalancer or NodePort
     ##
@@ -118,12 +114,11 @@ mongodb:
     ## Port used when service type is LoadBalancer
     ##
 #    port: 27017 
-  
 
 
 imagePullSecrets: []
-nameOverride: "local-analytics-rstudio"
-fullnameOverride: "local-analytics"
+nameOverride: "analytics"
+fullnameOverride: "analytics"
 
 
 serviceAccount:
