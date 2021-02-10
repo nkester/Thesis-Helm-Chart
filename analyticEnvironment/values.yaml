@@ -25,7 +25,7 @@ rstudio:
     secondEnvValue: "TRUE"
   persistentStorage:
     firstVolName: project-analytics-rstudio-volume
-    firstClaimName: analytics-local-rstudio-pvc
+    firstClaimName: analytics-ebs-rstudio-pvc
     firstMountPath: "/home/rstudio/project-analytics-files"
 #    secondVolName: user-neil-rstudio-volume
 #    secondClaimName: user-neil-rstudio-pvc
@@ -48,7 +48,7 @@ rstudio:
  
 # Values passed to the dependent postgres chart
 postgresql:
-  enabled: false
+  enabled: true
   postgresqlUsername: postgres
   postgresqlPassword: mypass
   service:
@@ -57,7 +57,7 @@ postgresql:
   persistence:
     enabled: true
     # If an existing pvc exists (created prior to this chart) it can be passed here.
-    existingClaim: analytics-pg-pvc
+    existingClaim: analytics-ebs-postgres-pvc
     
     ## The path the volume will be mounted at, useful when using different
     ## PostgreSQL images.
@@ -99,11 +99,11 @@ mongodb:
     enabled: true
     # Requires mongodb.persistence.enabled: true
     # If defined, PVC must be created manually before the volume will be bound
-    existingClaim: analytics-local-mongodb-pvc
-    storageClassName: "analytic-local-storage" #"-"
-    accessModes:
-      - ReadWriteOnce
-    size: 10Gi
+    existingClaim: 		analytics-ebs-mongodb-pvc
+    #storageClassName: "analytic-local-storage" #"-"
+    #accessModes:
+    #  - ReadWriteOnce
+    #size: 10Gi
 
 #  arbiter:
 #    enabled: false
@@ -117,8 +117,8 @@ mongodb:
 
 
 imagePullSecrets: []
-nameOverride: "analytics"
-fullnameOverride: "analytics"
+nameOverride: "rstudio"
+fullnameOverride: "rstudio"
 
 
 serviceAccount:
