@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: analytics-ebs-rstudio-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  awsElasticBlockStore: 
+    fsType: ext4
+    volumeID: vol-05b456b0b36e54b8e
+  capacity: 
+    storage: 10Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: analytics-ebs-mongodb-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  awsElasticBlockStore: 
+    fsType: ext4
+    volumeID: vol-0966b773ea53d574b
+  capacity:
+    storage: 10Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: analytics-ebs-postgres-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  awsElasticBlockStore: 
+    fsType: ext4
+    volumeID: vol-0db80a7f69e6b4cd2
+  capacity: 
+    storage: 10Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
