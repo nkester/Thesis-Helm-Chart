@@ -5,6 +5,11 @@ statefulset:
 # Replica Count
 replicaCount: 1
 
+#nameOverride: ""
+#fullnameOverride: ""
+
+imagePullSecrets: []
+
 # Specify the deployment strategy. The provided are defaults
 deploymentStrategy: {}
   # rollingUpdate:
@@ -27,9 +32,6 @@ rstudio:
     firstVolName: project-analytics-rstudio-volume
     firstClaimName: analytics-ebs-rstudio-pvc
     firstMountPath: "/home/rstudio/project-analytics-files"
-#    secondVolName: user-neil-rstudio-volume
-#    secondClaimName: user-neil-rstudio-pvc
-#    secondMountPath: "/home/rstudio/personal-working-files"
   resources: {}
     # cpu: 250m
     # memory: 4800Mi
@@ -104,22 +106,6 @@ mongodb:
     #accessModes:
     #  - ReadWriteOnce
     #size: 10Gi
-
-#  arbiter:
-#    enabled: false
-#  service:
-    ## Service type. Allowed values: LoadBalancer or NodePort
-    ##
-#    type: LoadBalancer
-    ## Port used when service type is LoadBalancer
-    ##
-#    port: 27017 
-
-
-imagePullSecrets: []
-nameOverride: "rstudio"
-fullnameOverride: "rstudio"
-
 
 serviceAccount:
   # Specifies whether a service account should be created
