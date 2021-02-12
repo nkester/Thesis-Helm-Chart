@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: analytics-local-rstudio-pv
+  labels:
+    app: rstudio
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: analytic-local-storage
+  local:
+    path: "/dev/sda1/analytics/rstudio"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - nvesd-worker1
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: analytics-local-mongodb-pv
+  labels:
+    app: mongodb
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: analytic-local-storage
+  local:
+    path: "/dev/sda1/analytics/mongodb"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - nvesd-worker1

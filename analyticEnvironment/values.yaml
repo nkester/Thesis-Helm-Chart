@@ -5,6 +5,11 @@ statefulset:
 # Replica Count
 replicaCount: 1
 
+#nameOverride: ""
+#fullnameOverride: ""
+
+imagePullSecrets: []
+
 # Specify the deployment strategy. The provided are defaults
 deploymentStrategy: {}
   # rollingUpdate:
@@ -16,7 +21,7 @@ deploymentStrategy: {}
 rstudio:
   podName: rstudio-server
   imageRepository: docker.io/neilkester/thesis-rstudio #rocker/rstudio
-  imageTag: v1.2 #4.0.3 #3.6.3
+  imageTag: v1.3 #4.0.3 #3.6.3
   imagePullPolicy: IfNotPresent
   env:
     firstEnvName: PASSWORD
@@ -25,11 +30,8 @@ rstudio:
     secondEnvValue: "TRUE"
   persistentStorage:
     firstVolName: project-analytics-rstudio-volume
-    firstClaimName: analytics-rstudio-pvc
+    firstClaimName: analytics-ebs-rstudio-pvc
     firstMountPath: "/home/rstudio/project-analytics-files"
-#    secondVolName: user-neil-rstudio-volume
-#    secondClaimName: user-neil-rstudio-pvc
-#    secondMountPath: "/home/rstudio/personal-working-files"
   resources: {}
     # cpu: 250m
     # memory: 4800Mi
@@ -57,7 +59,7 @@ postgresql:
   persistence:
     enabled: true
     # If an existing pvc exists (created prior to this chart) it can be passed here.
-    existingClaim: analytics-pg-pvc
+    existingClaim: analytics-ebs-postgres-pvc
     
     ## The path the volume will be mounted at, useful when using different
     ## PostgreSQL images.
@@ -83,14 +85,6 @@ postgresql:
 
 mongodb:
   enabled: true
-  ## Kubernetes Cluster Domain
-  ##
-#  clusterDomain: cluster.local
-  ## MongoDB architecture. Allowed values: standalone or replicaset
-  ##
-#  architecture: standalone
-#  externalAccess:
-#    enabled: false
   auth:
     enabled: true
     rootPassword: "mypass"
@@ -102,29 +96,16 @@ mongodb:
     database: "modelResults"
   volumePermissions:
     enabled: true
+  architecture: standalone
   persistence:
     enabled: true
-    
     # Requires mongodb.persistence.enabled: true
     # If defined, PVC must be created manually before the volume will be bound
-    existingClaim: analytics-mongodb-pvc
-#    accessModes:
-#      - ReadWriteOnce
-#    size: 8Gi
-#  service:
-    ## Service type. Allowed values: LoadBalancer or NodePort
-    ##
-#    type: LoadBalancer
-    ## Port used when service type is LoadBalancer
-    ##
-#    port: 27017 
-  
-
-
-imagePullSecrets: []
-nameOverride: "analytics"
-fullnameOverride: "analytics"
-
+    existingClaim: 		analytics-ebs-mongodb-pvc
+    #storageClassName: "analytic-local-storage" #"-"
+    #accessModes:
+    #  - ReadWriteOnce
+    #size: 10Gi
 
 serviceAccount:
   # Specifies whether a service account should be created
