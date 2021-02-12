@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: analytics-ebs-rstudio-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ""
+  volumeName: "analytics-ebs-rstudio-pv"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: analytics-ebs-mongodb-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ""
+  volumeName: "analytics-ebs-mongodb-pv"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: analytics-ebs-postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ""
+  volumeName: "analytics-ebs-postgres-pv"

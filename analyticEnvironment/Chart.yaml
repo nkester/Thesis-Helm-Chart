@@ -1,5 +1,5 @@
 apiVersion: v2
-name: analyticEnvironment
+name: analytic-environment
 description: This chart will deploy an analytic environment with the user's choice of database management system. Includes RStudio, Jupyter, PostgreSQL, and MongoDB.
 type: application
 
