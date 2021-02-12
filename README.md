@@ -4,6 +4,20 @@ How to guide to Helm Charts.
 
 https://helm.sh/docs/topics/charts/  
 
+# Deploying the Chart  
+
+The following commands are required to deploy the chart. This assumes that you have a yaml manifest that describes the persistent volumm (pv) and persistent volume claim (pvc) resources.  
+
+Create the pv resources. These are not namespaced.
+`$ kubectl apply --namespace analytics -f ./persistentStorage/Rancher/pv-ebs.yaml `  
+
+Create the pvc resources. These ARE namespaced. Also, we have specified the pv each pvc should bind to in the yaml using the `volumnName` attribute.  
+`$ kubectl apply --namespace analytics -f ./persistentStorage/Rancher/pvc-ebs.yaml`  
+
+Once these are created, apply the helm chart. The `values.yaml` file in this directory should specify the pvc each resource should mount to. This deployment uses static, rather than dynamic, provisioning.  
+`$ helm install analytic-environment ./analyticEnvironment --namespace analytics`
+
+
 # Parameters in the values.yaml  
 
 `statefulset.enabled`: Currently set to false. **To be built out**  
@@ -103,15 +117,59 @@ Create the persistent volume and persistent volume claim before deploying the rs
 
 Note, if you want to use a specific namespace, create it first with `kubectl create ns <namespace>`  
 
-```{bash}
-kubectl apply -f ./pv.yaml --namespace <specific namespace>
+This approach uses statically provisioned amazon web services (aws) elastic block storage (ebs) volumes mapped to persistent volume resources which are in turn mapped to persistent volume claim resources in kubernetes.  
 
-kubectl apply -f ./pvc.yaml --namespace <specific namespace>
+The persistent volume yaml for one pv is below:  
+
+```
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: analytics-ebs-rstudio-pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  awsElasticBlockStore: 
+    fsType: ext4
+    volumeID: vol-05b456b0b36e54b8e
+  capacity: 
+    storage: 10Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+
 ```  
+
+A persistent volume claim yaml for one pvc is below:  
+
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: analytics-ebs-rstudio-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: ""
+  volumeName: "analytics-ebs-rstudio-pv"
+
+```
 
 At this point update the `values.yaml` with the volume and claim names under the `.Vales.rstudio.persistentStorage` and `.Values.postgresql.persistence.existingClaim` location.  
 
 Now you can install the helm chart as normal. Ensure you install it into the same namespace as you previously applied the pv.yaml and pvc.yaml files.  
+
+## old notes  
+This approach uses `local` volumes because the current NVESD Cluster is not correctly provisioned to use `awsElasticBlockStore` volumes.  
+
+See the reference [here](https://kubernetes.io/docs/concepts/storage/volumes/#local) for information about the approach from the kubernetes.io reference. In short, this is a more durable and portable solution than `hostPath`.  
+
+Create a `Storage Class` for the `local` volume type based on the [kubernetes.io documentation](https://kubernetes.io/docs/concepts/storage/storage-classes/#local)  
+
+**IMPORTANT:** When using the `local` volume type, the folder paths must exist. If they do not, the initContainer will not have anything to reference. To fix this, I have created another pv and pvc for the appropriate local drive directory (in this case /dev/sda1/) and mounted it to a basic ubuntu container. With this pod running, I ran `kubectl exec -it <pod name> -- bash` from my WSL2 to enter the pod and create the required directories. The initContainers for each service will change the file permissions as required.
+
 
 # MongoDB  
 
@@ -152,6 +210,8 @@ Another great resource is the [MongoDB Manual](https://docs.mongodb.com/manual/i
 
 # Jupyter Hub  
 
+**DID NOT USE BECAUSE THE LOADBALANCING SERVICE HAD ISSUES. USE RSTUDIO TO RUN PYTHON CODE INSTEAD**
+
 Use references here:
 
 [Jupyter Hub Helm Charts|https://jupyterhub.github.io/helm-chart/] 
@@ -164,14 +224,4 @@ Once the chart deploys find the public-proxy service's port with: `kubectl get -
 Get the cluster's external IP with: `kubectl get nodes --namespace neil-ns -o jsonpath="{.items[0].status.addresses[0].address}"`
 
 Use these to log into the server.
-`
-# Persistent Volumes  
-
-This approach uses `local` volumes because the current NVESD Cluster is not correctly provisioned to use `awsElasticBlockStore` volumes.  
-
-See the reference [here](https://kubernetes.io/docs/concepts/storage/volumes/#local) for information about the approach from the kubernetes.io reference. In short, this is a more durable and portable solution than `hostPath`.  
-
-Create a `Storage Class` for the `local` volume type based on the [kubernetes.io documentation](https://kubernetes.io/docs/concepts/storage/storage-classes/#local)  
-
-**IMPORTANT:** When using the `local` volume type, the folder paths must exist. If they do not, the initContainer will not have anything to reference. To fix this, I have created another pv and pvc for the appropriate local drive directory (in this case /dev/sda1/) and mounted it to a basic ubuntu container. With this pod running, I ran `kubectl exec -it <pod name> -- bash` from my WSL2 to enter the pod and create the required directories. The initContainers for each service will change the file permissions as required.
 
