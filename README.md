@@ -17,6 +17,10 @@ Create the pvc resources. These ARE namespaced. Also, we have specified the pv e
 Once these are created, apply the helm chart. The `values.yaml` file in this directory should specify the pvc each resource should mount to. This deployment uses static, rather than dynamic, provisioning.  
 `$ helm install analytic-environment ./analyticEnvironment --namespace analytics`
 
+## Copy local files to a pod  
+
+This is useful when moving files into another pod. A use case for this is setting up an apache http server and moving static html files there to host.
+`kubectl cp /tmp/foo <some-namespace>/<some-pod>:/tmp/bar`
 
 # Parameters in the values.yaml  
 
