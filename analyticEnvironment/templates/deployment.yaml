@@ -29,7 +29,10 @@ spec:
           image: "{{ .Values.rstudio.imageRepository }}:{{ .Values.rstudio.imageTag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.rstudio.imagePullPolicy }}
           ports:
-            - containerPort: {{ .Values.rstudio.service.rstudioPort }}
+            - name: rstudio
+              containerPort: {{ .Values.rstudio.service.rstudioPort }}
+            - name: shiny
+              containerPort: {{ .Values.rstudio.service.shinyPort }}
           volumeMounts:
             - mountPath: {{ .Values.rstudio.persistentStorage.firstMountPath }}
               name: {{ .Values.rstudio.persistentStorage.firstVolName }}
@@ -38,6 +41,8 @@ spec:
               value: {{ .Values.rstudio.env.firstEnvValue }} #"mypass"
             - name: {{ .Values.rstudio.env.secondEnvName }} #ROOT
               value: {{ quote .Values.rstudio.env.secondEnvValue }} #"TRUE"
+            - name: ADD
+              value: shiny
       initContainers:
         - name: changeowner-one
           image: busybox

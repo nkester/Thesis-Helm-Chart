@@ -6,7 +6,7 @@ statefulset:
 replicaCount: 1
 
 #nameOverride: ""
-#fullnameOverride: ""
+fullnameOverride: "shinytest"
 
 imagePullSecrets: []
 
@@ -30,7 +30,7 @@ rstudio:
     secondEnvValue: "TRUE"
   persistentStorage:
     firstVolName: project-analytics-rstudio-volume
-    firstClaimName: analytics-ebs-rstudio-pvc
+    firstClaimName: analytics-ebs-shiny-pvc
     firstMountPath: "/home/rstudio/project-analytics-files"
   resources: {}
     # cpu: 250m
@@ -38,7 +38,9 @@ rstudio:
   service:
     type: NodePort
     rstudioPort: 8787
-    podPort: 30633 #or 8787
+    rstudioNodePort: 30633 #or 8787
+    shinyPort: 3838
+    shinyNodePort: 30632
     portProtocol: TCP
     # clusterIP: None
   route: {}
@@ -50,7 +52,7 @@ rstudio:
  
 # Values passed to the dependent postgres chart
 postgresql:
-  enabled: true
+  enabled: false
   postgresqlUsername: postgres
   postgresqlPassword: mypass
   service:
@@ -84,7 +86,7 @@ postgresql:
  
 
 mongodb:
-  enabled: true
+  enabled: false
   auth:
     enabled: true
     rootPassword: "mypass"

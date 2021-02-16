@@ -7,10 +7,14 @@ metadata:
 spec:
   type: {{ .Values.rstudio.service.type }}
   ports:
-    - name: http
-      protocol: TCP
+    - name: rstudio
+      protocol: {{ .Values.rstudio.service.portProtocol }}
       port: {{ .Values.rstudio.service.rstudioPort }}
-      nodePort: {{ .Values.rstudio.service.PodPort }}
+      nodePort: {{ .Values.rstudio.service.rstudioNodePort }}
+    - name: shiny
+      protocol: {{ .Values.rstudio.service.portProtocol }}
+      port: {{ .Values.rstudio.service.shinyPort }}
+      nodePort: {{ .Values.rstudio.service.shinyNodePort }}
       
   selector:
     {{- include "analyticEnvironment.selectorLabels" . | nindent 4 }}
