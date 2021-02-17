@@ -6,7 +6,7 @@ statefulset:
 replicaCount: 1
 
 #nameOverride: ""
-#fullnameOverride: ""
+fullnameOverride: ""
 
 imagePullSecrets: []
 
