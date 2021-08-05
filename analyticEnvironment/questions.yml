@@ -1,0 +1,51 @@
+categories:
+  - Analytic
+questions:
+  - variable: fullnameOverride  
+    label: "Deployment Name"  
+    type: string  
+    required: true  
+    group: "Service"
+  - variable: defaultImage
+    default: true
+    description: "Use the container image default in the helm chart."
+    label: "Use Default Images"
+    type: boolean
+    show_subquestion_if: false
+    group: "Analytic Deployment"
+    subquestions:
+    - variable: rstudio.imageRepository
+      label: "IDE Container"
+      default: "docker.io/neilkester/thesis-rstudio"
+      type: string
+    - variable: rstudio.imageTag
+      description: "Which version of this container do you want?"
+      default: "v1.3"
+      type: string
+      label: "Image Tag"
+  - variable: rstudio.env.firstEnvValue
+    description: "Provide a password. The username will be rstudio"
+    default: "mypass"
+    type: string
+    label: "RStudio Password"
+    group: "Analytic Deployment"
+  - variable: rstudio.persistentStorage.firstClaimName
+    description: "Provide a persistent volume to save data to."
+    default: "analytics-ebs-rstudio-pvc"
+    group: "Analytic Deployment"
+  - variable: postgresql.enabled
+    default: false
+    type: boolean
+    label: "Deploy a PostgreSQL DBMS?"
+    description: "Selecting true here deploys a single node postgresql container."
+    group: "Database Management Systems"
+  - variable: mongodb.enabled
+    default: false
+    type: boolean
+    label: "Deploy a MongoDB DBMS?"
+    group: "Database Management Systems"
+    show_subquestion_if: true
+    subquestions:
+    - variable: mongodb.persistence.existingClaim
+      default: analytics-ebs-mongodb-pvc
+      description: "What volume do you want the database to persist on?"
